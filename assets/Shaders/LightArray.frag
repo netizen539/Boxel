@@ -1,4 +1,4 @@
-#version 130
+#version 140
 #extension GL_EXT_texture_array : enable
 //#import "Common/ShaderLib/Parallax.glsllib"
 //#import "Common/ShaderLib/Optics.glsllib"

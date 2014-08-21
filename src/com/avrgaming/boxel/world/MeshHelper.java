@@ -518,8 +518,8 @@ public class MeshHelper {
         Material mat = new Material(assetManager, "Shaders/LightArray.j3md"); 
         mat.setTexture("DiffuseArray", TextureManager.terrianTextures);
         
-    //    Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md"); 
-      //  mat.setColor("Color", ColorRGBA.Red);
+       // Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md"); 
+       // mat.setColor("Color", ColorRGBA.Red);
         
         mat.getAdditionalRenderState().setWireframe(false);
        // mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);

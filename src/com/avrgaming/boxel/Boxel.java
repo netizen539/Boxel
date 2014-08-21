@@ -148,7 +148,7 @@ public class Boxel extends SimpleApplication {
             assetManager, "Textures/sky.png", true));
         
         
-        flyCam.setMoveSpeed(10);
+        flyCam.setMoveSpeed(20);
         BlockType.init();
         TextureManager.loadTextures();
         

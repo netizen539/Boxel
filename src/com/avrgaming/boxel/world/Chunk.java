@@ -88,38 +88,38 @@ public class Chunk {
         meshHelper.process();
     }
 
-    private boolean checkForSlope(BlockCoord bcoord, BlockSide side) {
-        boolean doSlope = true;
-        boolean sideSloped = false;
-        BlockCoord next;
-        Block nextBlock;
-        
-        for (BlockSide s : BlockSide.values()) {
-            if (s.equals(BlockSide.TOP) || s.equals(BlockSide.BOTTOM)) {
-                continue;
-            }
-            
-            
-            next = BlockCoord.getAdjacentBlockCoord(bcoord, s);
-            nextBlock = blocks.get(next);
-            
-            if (nextBlock == null || nextBlock.isAir()) {
-                if (side != s) {
-                    doSlope = false;
-                }
-                
-                sideSloped = true;
-            }
-        }
-        
-        return doSlope && sideSloped;
-    }
+//    private boolean checkForSlope(BlockCoord bcoord, BlockSide side) {
+//        boolean doSlope = true;
+//        boolean sideSloped = false;
+//        BlockCoord next;
+//        Block nextBlock;
+//        
+//        for (BlockSide s : BlockSide.values()) {
+//            if (s.equals(BlockSide.TOP) || s.equals(BlockSide.BOTTOM)) {
+//                continue;
+//            }
+//            
+//            
+//            next = BlockCoord.getAdjacentBlockCoord(bcoord, s);
+//            nextBlock = blocks.get(next);
+//            
+//            if (nextBlock == null || nextBlock.isAir()) {
+//                if (side != s) {
+//                    doSlope = false;
+//                }
+//                
+//                sideSloped = true;
+//            }
+//        }
+//        
+//        return doSlope && sideSloped;
+//    }
     
     public void generate() {
         map = new HeightMap(CHUNK_SIZE*4);
         
-        map.simplexF = 0.03f;
-        map.simplexF2 = 0.008f;
+        map.simplexF = 0.4f;
+        map.simplexF2 = 0.4f;
 
         map.perturbF = 0.0f;
         map.perturbD = 0.0f;
@@ -130,8 +130,8 @@ public class Chunk {
         map.generate(x,z);
   
         for (int y = 0; y < YMAX; y++) {
-            for (int x = 0; x < CHUNK_SIZE; x += 2) {
-                for (int z = 0; z < CHUNK_SIZE; z += 2) {
+            for (int x = 0; x < CHUNK_SIZE; x += 1) {
+                for (int z = 0; z < CHUNK_SIZE; z += 1) {
                     
                     float[] points = new float[4];
                     points[0] = (map.heights[x][z]);
@@ -159,87 +159,56 @@ public class Chunk {
     
                         
                         Block b = new Block(x,y,z, points, type);
+                        b.shape = Block.BlockShape.BOX;
                         blocks.put(new BlockCoord(x,y,z),b);
                     }
                 }
             }
         }
 
-        /* 
-         * Determine which blocks should be slope blocks
-         * and set them as such here.
-         */
-        BlockCoord bcoord = new BlockCoord(0,0,0);
-        for (Block b : blocks.values()) {
-            BlockCoord next;
-            Block nextBlock;
-            bcoord.x = b.x; bcoord.y = b.y; bcoord.z = b.z;
-            
-            next = BlockCoord.getAdjacentBlockCoord(bcoord, Block.BlockSide.TOP);
-            nextBlock = blocks.get(next);
-            
-            if (nextBlock != null && !nextBlock.isAir()) {
-                b.shape = Block.BlockShape.BOX;
-                continue;
-            }
-            
-            if (checkForSlope(bcoord, BlockSide.NORTH)) {
-                b.shape = Block.BlockShape.SLOPE_NORTH;
-                continue;
-            }
-            
-            if (checkForSlope(bcoord, BlockSide.SOUTH)) {
-                b.shape = Block.BlockShape.SLOPE_SOUTH;
-                continue;
-            }
-                        
-            if (checkForSlope(bcoord, BlockSide.EAST)) {
-                b.shape = Block.BlockShape.SLOPE_EAST;
-                continue;
-            }
-            
-            if (checkForSlope(bcoord, BlockSide.WEST)) {
-                b.shape = Block.BlockShape.SLOPE_WEST;
-                continue;
-            }
-            
-//            next = BlockCoord.getAdjacentBlockCoord(bcoord, Block.BlockSide.NORTH);
+//        /* 
+//         * Determine which blocks should be slope blocks
+//         * and set them as such here.
+//         */
+//        BlockCoord bcoord = new BlockCoord(0,0,0);
+//        for (Block b : blocks.values()) {
+//            BlockCoord next;
+//            Block nextBlock;
+//            bcoord.x = b.x; bcoord.y = b.y; bcoord.z = b.z;
+//            
+//            next = BlockCoord.getAdjacentBlockCoord(bcoord, Block.BlockSide.TOP);
 //            nextBlock = blocks.get(next);
 //            
-//            if (nextBlock == null || nextBlock.isAir()) {
+//            if (nextBlock != null && !nextBlock.isAir()) {
+//                b.shape = Block.BlockShape.BOX;
+//                continue;
+//            }
+//            
+//            if (checkForSlope(bcoord, BlockSide.NORTH)) {
 //                b.shape = Block.BlockShape.SLOPE_NORTH;
 //                continue;
 //            }
 //            
-//            next = BlockCoord.getAdjacentBlockCoord(bcoord, Block.BlockSide.SOUTH);
-//            nextBlock = blocks.get(next);
-//            
-//            if (nextBlock == null || nextBlock.isAir()) {
+//            if (checkForSlope(bcoord, BlockSide.SOUTH)) {
 //                b.shape = Block.BlockShape.SLOPE_SOUTH;
 //                continue;
 //            }
-//            
-//            next = BlockCoord.getAdjacentBlockCoord(bcoord, Block.BlockSide.EAST);
-//            nextBlock = blocks.get(next);
-//            
-//            if (nextBlock == null || nextBlock.isAir()) {
+//                        
+//            if (checkForSlope(bcoord, BlockSide.EAST)) {
 //                b.shape = Block.BlockShape.SLOPE_EAST;
 //                continue;
 //            }
 //            
-//            next = BlockCoord.getAdjacentBlockCoord(bcoord, Block.BlockSide.WEST);
-//            nextBlock = blocks.get(next);
-//            
-//            if (nextBlock == null || nextBlock.isAir()) {
+//            if (checkForSlope(bcoord, BlockSide.WEST)) {
 //                b.shape = Block.BlockShape.SLOPE_WEST;
 //                continue;
 //            }
-            
-            b.shape = Block.BlockShape.BOX;
-        }
+//            
+//            b.shape = Block.BlockShape.BOX;
+//        }
         
         
-        
+ 
     }
     
     public void unload() {
